@@ -1,16 +1,44 @@
 class KnightPathFinder
     attr_reader :root
-    def initialize(position)
-        @position = position
-        @root = PolyTreeNode.root_node(position)
+    def initialize(start_pos, end_pos)
+        @start_pos = start_pos 
+        @end_pos = end_pos 
+        @root = PolyTreeNode.root_node(start_pos)
         @board = Array.new(8) {Array.new(8), '_'}
+        @considered_positions = [start_pos]
     end
 
     def build_move_tree(root)
-
+        start = root.initial_position
+        possible_moves = self.new_move_positions(start)
+        
+        possible_moves.each do |move|
+            
+        end 
     end
 
-    def self.valid_positions
-        
+    def self.valid_moves(start_pos)
+        x, y = start_pos 
+        possible_moves = []
+
+        possible_moves << [x+2,y+1]
+        possible_moves << [x+2,y-1]
+        possible_moves << [x-2,y+1]
+        possible_moves << [x-2,y-1]
+        possible_moves << [x+1,y+2]
+        possible_moves << [x+1,y-2]
+        possible_moves << [x-1,y+2]
+        possible_moves << [x-1,y-2]
+
+        valid_moves = possible_moves.select do |pos|
+            (pos[0] >= 0 && pos[0] <= 7) && (pos[1] >= 0 && pos[1] <= 7)
+        end
+        valid_moves 
+    end
+
+    def new_move_positions(pos)
+        all_pos = KnightPathFinder.valid_moves(pos)
+        all_pos.select! { |pos| !@considered_positions.include?(pos) }
+        all_pos 
     end
 end
