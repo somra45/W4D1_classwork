@@ -35,6 +35,22 @@ class KnightPathFinder
 
     end
 
+    def build_move_tree_2(root)
+        start = root.initial_position
+        possible_moves = self.new_move_positions(start)
+
+        possible_moves.each do |move|
+            new_node = PolyTreeNode.new(move)
+            root.children << new_node
+            new_node.parent = root 
+            return new_node if new_node.initial_position == @end_pos
+        end
+        root.children.each do |child|
+            result = self.build_move_tree_2(child)
+            return result if !result.nil?
+        end 
+    end
+    
     def self.valid_moves(start_pos)
         x, y = start_pos 
         possible_moves = []
